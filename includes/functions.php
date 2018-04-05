@@ -4,7 +4,8 @@
 	  header("Location: " . $new_location);
 	  exit;
 	}
-
+	
+	// This function will help prevent malicious query entries into the database. 
 	function mysql_prep($string) {
 		global $connection;
 		
@@ -12,21 +13,26 @@
 		return $escaped_string;
 	}
 	
+	// This function will take in a result array and die or exit if the array is empty
 	function confirm_query($result_set) {
 		if (!$result_set) {
 			die("Database query failed.");
 		}
 	}
-
+	
+	// This function will display the errors 
 	function form_errors($errors=array()) {
 		$output = "";
+		
+		//check if errors array has values
 		if (!empty($errors)) {
 		  $output .= "<div class=\"error\">";
 		  $output .= "Please fix the following errors:";
 		  $output .= "<ul>";
+		//output the erros
 		  foreach ($errors as $key => $error) {
 		    $output .= "<li>";
-				$output .= htmlentities($error);
+				$output .= htmlentities($error); // htmlentities to convert special caharacters for browser
 				$output .= "</li>";
 		  }
 		  $output .= "</ul>";
@@ -34,7 +40,7 @@
 		}
 		return $output;
 	}
-	
+		// return all subjects in an array
 	function find_all_subjects($public=true) {
 		global $connection;
 		
@@ -44,7 +50,7 @@
 			$query .= "WHERE visible = 1 ";
 		}
 		$query .= "ORDER BY position ASC";
-		$subject_set = mysqli_query($connection, $query);
+		$subject_set = mysqli_query($connection, $query); // mysqli prevents malicious entry into database. 
 		confirm_query($subject_set);
 		return $subject_set;
 	}
@@ -137,9 +143,7 @@
 		}
 	}
 
-	// navigation takes 2 arguments
-	// - the current subject array or null
-	// - the current page array or null
+	// navigation takes 2 arguments, the current subject array or null   OR the current page array or null
 	function navigation($subject_array, $page_array) {
 		$output = "<ul class=\"subjects\">";
 		$subject_set = find_all_subjects(false);
