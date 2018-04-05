@@ -8,10 +8,14 @@ function fieldname_as_text($fieldname) {
   return $fieldname;
 }
 
-// * presence
+// Description: 
+// presence will check if value is not empty and
+// before sending value to this function,
 // use trim() so empty spaces don't count
 // use === to avoid false positives
-// empty() would consider "0" to be empty
+// Do not use empty() becuase would consider "0" to be empty
+// Return Value: 
+// True if value is set and not empty otherwise false
 function has_presence($value) {
 	return isset($value) && $value !== "";
 }
@@ -19,15 +23,15 @@ function has_presence($value) {
 function validate_presences($required_fields) {
   global $errors;
   foreach($required_fields as $field) {
-    $value = trim($_POST[$field]);
+    $value = trim($_POST[$field]); // trim deletes empty spaces
   	if (!has_presence($value)) {
   		$errors[$field] = fieldname_as_text($field) . " can't be blank";
   	}
   }
 }
 
-// * string length
-// max length
+// Description: string length will check the length of the string
+// Return Value: true if value is less than max length
 function has_max_length($value, $max) {
 	return strlen($value) <= $max;
 }
